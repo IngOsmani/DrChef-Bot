@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Dr&Chef Bot
 
 Chatbot para Facebook Messenger e Instagram DM con OpenAI.
@@ -13,3 +14,7 @@ Chatbot para Facebook Messenger e Instagram DM con OpenAI.
 ## Comandos
 npm install
 npm start
+=======
+# DrChef-Bot
+Chatbot oficial de Dr&amp;Chef Uniformes. Integra ChatGPT-5 con Messenger e Instagram para atención automática, cotizaciones y consejos de cuidado de uniformes médicos y de chef.
+>>>>>>> 71c11227c86e99cf24bdce95bab96d18489f43bd
