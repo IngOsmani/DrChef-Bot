@@ -29,7 +29,42 @@ app.get("/webhook", (req, res) => {
   }
   return res.sendStatus(403);
 });
+// === RESPUESTAS RÁPIDAS PREDEFINIDAS ===
+function quickReply(text = "") {
+  const t = text.toLowerCase();
 
+  if (/precio|cotiz|cost/i.test(t)) {
+    return (
+      "💬 Para cotizaciones te atendemos por WhatsApp.\n" +
+      "📲 WhatsApp y llamadas: 81 8111 6026\n" +
+      "☎️ Fijo (tienda): 81 2089 4494\n\n" +
+      "Comparte modelo, talla y color y te cotizamos al momento."
+    );
+  }
+
+  if (/horario|abren|cierran/i.test(t)) {
+    return "⏰ Nuestro horario: Lun–Sáb 10:00 a 19:00. Domingos cerrado.";
+  }
+
+  if (/ubic|direc|llegar/i.test(t)) {
+    return (
+      "📍 Estamos frente a la Facultad de Medicina (entrada por Dr. Eduardo Aguirre Pequeño). " +
+      "Pídeme el pin por WhatsApp y te lo mando: 81 8111 6026."
+    );
+  }
+
+  if (/whats|contact|tel[eé]fono|número/i.test(t)) {
+    return "📲 WhatsApp y llamadas: 81 8111 6026\n☎️ Fijo (tienda): 81 2089 4494";
+  }
+
+  if (/marcas|brand|modelos/i.test(t)) {
+    return (
+      "🏷️ Trabajamos solo marcas reconocidas: WonderWink, Dickies, HH Works, Infinity, Healing Hands, Cherokee y más."
+    );
+  }
+
+  return null;
+}
 // --- Recepción de mensajes (POST)
 app.post("/webhook", async (req, res) => {
   try {
@@ -45,10 +80,15 @@ app.post("/webhook", async (req, res) => {
         event.message?.text ||
         event.postback?.payload ||
         "";
-
+// 🔍 LOGS para Render
+console.log("👤 senderId:", senderId);
+console.log("📝 userText:", userText);
+console.log("📦 raw event:", JSON.stringify(event, null, 2));
       if (!senderId) continue;
 
       // Generar respuesta con OpenAI
+      const quick = quickReply(userText);
+const reply = quick ?? (await generateReply(userText));
       const reply = await generateReply(userText);
 
       // Enviar respuesta a Messenger
