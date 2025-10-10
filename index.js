@@ -29,6 +29,7 @@ app.get("/webhook", (req, res) => {
   }
   return res.sendStatus(403);
 });
+
 // === RESPUESTAS RÁPIDAS PREDEFINIDAS ===
 function quickReply(text = "") {
   const t = text.toLowerCase();
@@ -87,9 +88,12 @@ console.log("📦 raw event:", JSON.stringify(event, null, 2));
       if (!senderId) continue;
 
       // Generar respuesta con OpenAI
-      const quick = quickReply(userText);
+// Generar respuesta con OpenAI / atajo
+const quick = quickReply(userText);
 const reply = quick ?? (await generateReply(userText));
-      const reply = await generateReply(userText);
+
+// Enviar respuesta a Messenger
+await sendMessage(senderId, reply);
 
       // Enviar respuesta a Messenger
       await sendMessage(senderId, reply);
